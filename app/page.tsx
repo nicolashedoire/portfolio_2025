@@ -232,19 +232,19 @@ function Portfolio() {
             </p>
             <div className="flex justify-center space-x-6 mb-12">
               <a 
-                href={`mailto:contact@${currentTheme.name.toLowerCase().replace(/\s+/g, '-')}.fr`}
+                href={`mailto:nicolashedoire@hotmail.com`}
                 className={`flex items-center justify-center w-12 h-12 rounded-full ${classes.background} ${classes.text} ${classes.hoverBg} transition-colors`}
               >
                 <Mail className="w-5 h-5" />
               </a>
               <a 
-                href="https://github.com" 
+                href="https://github.com/nicolashedoire" 
                 className={`flex items-center justify-center w-12 h-12 rounded-full ${classes.background} ${classes.text} ${classes.hoverBg} transition-colors`}
               >
                 <Github className="w-5 h-5" />
               </a>
               <a 
-                href="https://linkedin.com" 
+                href="https://www.linkedin.com/in/nicolas-hedoire-1734775b/" 
                 className={`flex items-center justify-center w-12 h-12 rounded-full ${classes.background} ${classes.text} ${classes.hoverBg} transition-colors`}
               >
                 <Linkedin className="w-5 h-5" />
