@@ -1,16 +1,44 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  // Icônes communes
-  Mail, Github, Linkedin, ArrowRight,
+  Mail, 
+  Github, 
+  Linkedin, 
+  ArrowRight,
+  LucideIcon 
 } from 'lucide-react';
 import { getThemeClasses, themes } from '@/app/constants';
 
+// Types
+type Service = {
+  title: string;
+  desc: string;
+};
 
+type Project = {
+  title: string;
+  desc: string;
+  tags: string[];
+  img: string;
+};
+
+type Theme = {
+  name: string;
+  icon: LucideIcon;
+  tagline: string;
+  title: string;
+  highlight: string;
+  description: string;
+  serviceIcons: LucideIcon[];
+  services: Service[];
+  projects: Project[];
+};
+
+type ThemeKey = keyof typeof themes;
 
 function Portfolio() {
-  const [activeTheme, setActiveTheme] = useState('ocean');
-  const projectsRef = useRef(null);
+  const [activeTheme, setActiveTheme] = useState<ThemeKey>('ocean');
+  const projectsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -33,28 +61,31 @@ function Portfolio() {
 
   const currentTheme = themes[activeTheme];
   const ThemeIcon = currentTheme.icon;
-  const themeClasses = getThemeClasses(activeTheme);
   const classes = getThemeClasses(activeTheme);
-
 
   // Theme Selector Component
   const ThemeSelector = () => {
-    return <div className="fixed top-0 left-0 right-0 z-50 bg-gray-100 p-4 flex gap-2 overflow-x-auto">
-      {Object.entries(themes).map(([key, theme]) => {
-        return <button
-          key={key}
-          onClick={() => setActiveTheme(key)}
-          className={`px-4 py-2 rounded-full flex items-center space-x-2 whitespace-nowrap transition-colors ${
-            activeTheme === key 
-              ? classes.primary + ' text-white' 
-              : 'bg-white text-gray-600 hover:bg-gray-50'
-          }`}
-        >
-          <theme.icon className="w-4 h-4" />
-          <span>{theme.name}</span>
-        </button>
-  })}
-    </div>
+    return (
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gray-100 p-4 flex gap-2 overflow-x-auto">
+        {(Object.entries(themes) as [ThemeKey, Theme][]).map(([key, theme]) => {
+          const ThemeIconComponent = theme.icon;
+          return (
+            <button
+              key={key}
+              onClick={() => setActiveTheme(key)}
+              className={`px-4 py-2 rounded-full flex items-center space-x-2 whitespace-nowrap transition-colors ${
+                activeTheme === key 
+                  ? classes.primary + ' text-white' 
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <ThemeIconComponent className="w-4 h-4" />
+              <span>{theme.name}</span>
+            </button>
+          );
+        })}
+      </div>
+    );
   };
 
   return (
@@ -82,7 +113,7 @@ function Portfolio() {
       {/* Hero Section */}
       <header className="relative min-h-screen flex items-center justify-center pt-36">
         <div className="absolute inset-0 z-0">
-          <div className={`absolute inset-0 bg-gradient-to-b f${classes.gradient} to-white`}></div>
+          <div className={`absolute inset-0 bg-gradient-to-b ${classes.gradient} to-white`}></div>
           <div 
             className="absolute inset-0 opacity-20"
             style={{
@@ -128,11 +159,11 @@ function Portfolio() {
       <section className="py-20 bg-white" id="about">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {currentTheme.services.map((service: any, index: number) => {
+            {currentTheme.services.map((service, index) => {
               const ServiceIcon = currentTheme.serviceIcons[index];
               return (
                 <div key={index} className="group">
-                  <div className={`mb-6 p-4 ${classes.background} rounded-2xl w-fit group-hover:bg-${classes.primary}-100 transition-colors`}>
+                  <div className={`mb-6 p-4 ${classes.background} rounded-2xl w-fit group-hover:${classes.hoverBg} transition-colors`}>
                     <ServiceIcon className={`w-8 h-8 ${classes.text}`} />
                   </div>
                   <h3 className="text-xl font-semibold mb-4">{service.title}</h3>
@@ -156,7 +187,7 @@ function Portfolio() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {currentTheme.projects.map((project: any, index: number) => (
+            {currentTheme.projects.map((project, index) => (
               <div 
                 key={index}
                 className="project-card opacity-0 translate-y-10 transition-all duration-700 ease-out bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl"
@@ -169,7 +200,7 @@ function Portfolio() {
                   <h3 className="text-2xl font-semibold mb-3">{project.title}</h3>
                   <p className="text-gray-600 mb-4">{project.desc}</p>
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {project.tags.map((tag: any, i: number) => (
+                    {project.tags.map((tag, i) => (
                       <span 
                         key={i}
                         className={`px-3 py-1 ${classes.background} ${classes.text} rounded-full text-sm`}
@@ -202,26 +233,26 @@ function Portfolio() {
             <div className="flex justify-center space-x-6 mb-12">
               <a 
                 href={`mailto:contact@${currentTheme.name.toLowerCase().replace(/\s+/g, '-')}.fr`}
-                className={`flex items-center justify-center w-12 h-12 rounded-full ${classes.background} ${classes.text} hover:bg-${classes.primary}-100 transition-colors`}
+                className={`flex items-center justify-center w-12 h-12 rounded-full ${classes.background} ${classes.text} ${classes.hoverBg} transition-colors`}
               >
                 <Mail className="w-5 h-5" />
               </a>
               <a 
                 href="https://github.com" 
-                className={`flex items-center justify-center w-12 h-12 rounded-full ${classes.background} ${classes.text} hover:bg-${classes.primary}-100 transition-colors`}
+                className={`flex items-center justify-center w-12 h-12 rounded-full ${classes.background} ${classes.text} ${classes.hoverBg} transition-colors`}
               >
                 <Github className="w-5 h-5" />
               </a>
               <a 
                 href="https://linkedin.com" 
-                className={`flex items-center justify-center w-12 h-12 rounded-full ${classes.background} ${classes.text} hover:bg-${classes.primary}-100 transition-colors`}
+                className={`flex items-center justify-center w-12 h-12 rounded-full ${classes.background} ${classes.text} ${classes.hoverBg} transition-colors`}
               >
                 <Linkedin className="w-5 h-5" />
               </a>
             </div>
             <div className="text-center">
               <a 
-                href="mailto:contact@jeandupont.fr"
+                href={`mailto:contact@${currentTheme.name.toLowerCase().replace(/\s+/g, '-')}.fr`}
                 className={`px-8 py-4 ${classes.background600} ${classes.backgroundHover700} text-white rounded-full transition-colors inline-flex items-center`}
               >
                 Démarrer une conversation

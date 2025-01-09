@@ -24,9 +24,6 @@ import {
 
   type ThemeKey = 'ocean' | 'nature' | 'space' | 'medical' | 'finance' | 'politics' | 'realestate';
 
-  type ColorMap = {
-    [key in ThemeKey]: ThemeColors;
-  };
 
 export const getThemeClasses = (theme: ThemeKey): ThemeColors=> {
     const colorMap = {
