@@ -7,7 +7,28 @@ import {
     Users, Key, Vote, PieChart, Leaf
   } from 'lucide-react';
 
-export const getThemeClasses = (theme: string) => {
+  type ThemeColors = {
+    primary: string;
+    text: string;
+    textHover: string;
+    border: string;
+    border600: string;
+    badge: string;
+    background: string;
+    background600: string;
+    backgroundHover700: string;
+    hoverBg: string;
+    gradient: string;
+    backgroundImage: string;
+  };
+
+  type ThemeKey = 'ocean' | 'nature' | 'space' | 'medical' | 'finance' | 'politics' | 'realestate';
+
+  type ColorMap = {
+    [key in ThemeKey]: ThemeColors;
+  };
+
+export const getThemeClasses = (theme: ThemeKey): ThemeColors=> {
     const colorMap = {
       ocean: {
         primary: 'bg-blue-600 hover:bg-blue-700',
